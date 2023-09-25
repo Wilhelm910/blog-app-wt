@@ -24,3 +24,28 @@
 .active {
     background-color: rgb(220, 117, 80);
 }
+
+.user-img-container {
+    display: flex;
+    align-items: center;
+
+    img {
+        margin: 0px 8px;
+    }
+
+    p {
+        margin: 0px 8px;
+    }
+
+    .logout-btn {
+        cursor: pointer;
+        padding: 8px 16px;
+        border-radius: 8px;
+
+        &:hover {
+            background-color: rgb(220, 117, 80);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+    }
+}

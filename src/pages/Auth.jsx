@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import "./auth.scss"
+import { auth } from '../firebase-config'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth'
+import { useNavigate } from 'react-router-dom'
 
 const initializeState = {
     firstName: "",
@@ -9,7 +12,10 @@ const initializeState = {
     confirmPassword: ""
 }
 
-const Auth = () => {
+const Auth = (props) => {
+
+    const { setActive } = props
+    const navigate = useNavigate()
 
     const [state, setState] = useState(initializeState)
     const [signUp, setSignUp] = useState(false)
@@ -25,6 +31,25 @@ const Auth = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+        if (!signUp) {
+            if (email && password) {
+                const { user } = await signInWithEmailAndPassword(auth, email, password)
+                setActive("home")
+            } else {
+                alert("All fields are mandatory to fill")
+            }
+        } else {
+            if (password != confirmPassword) {
+                alert("Passwords dont match")
+            }
+            if (email && password && firstName && lastName) {
+                const { user } = await createUserWithEmailAndPassword(auth, email, password)
+                await updateProfile(user, { displayName: `${firstName} ${lastName}` })
+            } else {
+                alert("All fields are mandatory to fill")
+            }
+        }
+        navigate("/")
     }
 
     return (
@@ -32,10 +57,34 @@ const Auth = () => {
             <div className="form-container">
                 <h2>{!signUp ? "Sign In" : "Sign Up"}</h2>
                 <form onSubmit={handleSubmit}>
+                    {signUp && (
+                        <>
+                            <div>
+                                <input
+                                    className={`${!signUp ? "sign-in-input" : "sign-up-input"}`}
+                                    type='text'
+                                    placeholder='First name'
+                                    name='firstName'
+                                    value={firstName}
+                                    onChange={handleInput}
+                                />
+                            </div>
+                            <div>
+                                <input
+                                    className={`${!signUp ? "sign-in-input" : "sign-up-input"}`}
+                                    type='text'
+                                    placeholder='Last name'
+                                    name='lastName'
+                                    value={lastName}
+                                    onChange={handleInput}
+                                />
+                            </div>
+                        </>
+                    )}
                     <div>
                         <input
                             className={`${!signUp ? "sign-in-input" : "sign-up-input"}`}
-                            type='text'
+                            type='email'
                             placeholder='Email'
                             name='email'
                             value={email}
@@ -48,10 +97,24 @@ const Auth = () => {
                             type='password'
                             placeholder='Password'
                             name='password'
-                            value={email}
+                            value={password}
                             onChange={handleInput}
                         />
                     </div>
+                    {signUp && (
+                        <>
+                            <div>
+                                <input
+                                    className={`${!signUp ? "sign-in-input" : "sign-up-input"}`}
+                                    type='password'
+                                    placeholder='Confirm password'
+                                    name='confirmPassword'
+                                    value={confirmPassword}
+                                    onChange={handleInput}
+                                />
+                            </div>
+                        </>
+                    )}
                     <div>
                         <button type='submit' className={`${!signUp ? "signIn" : "signUp"}`}>{!signUp ? "Sign In" : "Sign Up"}</button>
                     </div>
