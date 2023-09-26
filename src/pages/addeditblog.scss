@@ -1,0 +1,82 @@
+$color1: #f4f4f4;
+$color2: #3197EE;
+
+.blog-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-edit-form {
+    background-color: rgb(246, 240, 240);
+    margin-top: 32px;
+    padding: 32px;
+    -webkit-box-shadow: -2px 3px 15px 3px rgba(0, 0, 0, 0.29);
+    box-shadow: -2px 3px 15px 3px rgba(0, 0, 0, 0.29);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    div {
+        margin: 4px 0;
+    }
+
+    .trending-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .radio {
+            width: 30%;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    }
+
+    .select-container {
+        display: flex;
+        align-items: center;
+    }
+}
+
+select {
+    // A reset of styles, including removing the default dropdown arrow
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    padding: 0 1em 0 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+
+    // Stack above custom arrow
+    z-index: 1;
+
+    // Remove dropdown arrow in IE10 & IE11
+    // @link https://www.filamentgroup.com/lab/select-css.html
+    &::-ms-expand {
+        display: none;
+    }
+
+    // Remove focus outline, will add on alternate element
+    outline: none;
+}
+
+.blog-textarea {
+    width: 300px;
+    height: 200px;
+    border-radius: 8px;
+    padding: 8px;
+
+    &:focus {
+        outline: none;
+    }
+}
