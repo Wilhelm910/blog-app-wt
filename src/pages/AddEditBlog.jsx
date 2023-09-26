@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./addeditblog.scss"
 import { TagsInput } from "react-tag-input-component";
+import { db, storage } from "../firebase-config"
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 
 const initializeBlog = {
@@ -20,11 +24,16 @@ const categoryOptions = [
   "Business"
 ]
 
-const AddEditBlog = () => {
+const AddEditBlog = (props) => {
+
+  const navigate = useNavigate()
+
+  const { user } = props
 
   const [form, setForm] = useState(initializeBlog)
   const { title, tags, trending, category, description } = form
   const [file, setFile] = useState(null)
+  const [progress, setProgress] = useState(null)
 
 
   const handleInput = (event) => {
@@ -58,12 +67,70 @@ const AddEditBlog = () => {
     })
   }
 
-  console.log(form)
+
+  useEffect(() => {
+    const uploadFile = () => {
+      const storageRef = ref(storage, file.name)
+      const uploadTask = uploadBytesResumable(storageRef, file)
+
+      uploadTask.on("state_changed", (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        console.log("Upload is" + progress + "% done")
+        console.log(snapshot)
+        setProgress(progress)
+
+        switch (snapshot.state) {
+          case "paused":
+            console.log("upload is paused")
+          case "running":
+            console.log("Upload is running")
+            break;
+          default:
+            break
+        }
+
+      }, (error) => {
+        console.log(error)
+      },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+            setForm((prev) => ({
+              ...prev,
+              imgUrl: downloadUrl
+            }))
+          })
+        })
+    }
+
+    file && uploadFile()
+  }, [file])
+
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (category, title, tags, trending, description, file) {
+      try {
+        await addDoc(collection(db, "blogs"), {
+          ...form,
+          timestamp: serverTimestamp(),
+          author: user.displayName,
+          userId: user.uid
+        })
+      }
+      catch (error) {
+        console.log(error)
+      }
+    } else {
+      alert("All fields are mandatory")
+    }
+    navigate("/")
+  }
+
 
   return (
     <div className="add-edit-blog">
       <div className="blog-container">
-        <form className='add-edit-form'>
+        <form className='add-edit-form' onSubmit={handleSubmit}>
           <div className="input-container">
             <input
               type='text'
