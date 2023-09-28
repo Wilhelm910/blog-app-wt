@@ -11,6 +11,7 @@ import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, u
 import { useEffect, useState } from 'react'
 import { auth } from './firebase-config'
 import { signOut } from 'firebase/auth'
+import Detail from './pages/Detail'
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
       <Route index element={<Home />} />
       <Route path='create' element={user?.uid ? <AddEditBlog user={user} /> : <Navigate to="/" />} />
       <Route path='update/:id' element={user?.uid ? <AddEditBlog user={user} /> : <Navigate to="/" />} />
+      <Route path=':id' element={<Detail />} />
       <Route path='about' element={<About />} />
       <Route path='auth' element={<Auth setActive={setActive} />} />
       <Route path='*' element={<NotFound />} />

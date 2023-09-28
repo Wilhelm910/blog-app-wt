@@ -1,0 +1,25 @@
+.home {
+    margin: 64px;
+
+}
+
+.trending-section {
+    text-align: center;
+}
+
+.home-body {
+    display: flex;
+
+    .blog-section {
+
+        .blog-headline {
+            border-bottom: 1px solid black;
+        }
+    }
+
+    .home-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
