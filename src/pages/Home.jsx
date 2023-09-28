@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import "./home.scss"
 import BlogSection from '../components/BlogSection'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, deleteDoc, doc, onSnapshot } from 'firebase/firestore'
 import { db } from '../firebase-config'
+import Spinner from '../components/Spinner'
 
 
-const Home = () => {
+const Home = (props) => {
 
+
+    const { setActive, user } = props
     const [loading, setLoading] = useState(true)
     const [blogs, setBlogs] = useState([])
 
@@ -21,6 +24,8 @@ const Home = () => {
                 })
             });
             setBlogs(list)
+            setLoading(false)
+            setActive("/")
         }, (error) => {
             console.log(error)
         })
@@ -30,7 +35,25 @@ const Home = () => {
         }
     }, [])
 
-    console.log(blogs)
+    if (loading) {
+        return <Spinner />
+    }
+
+
+    const handleDelete = async (id) => {
+        console.log(id)
+        if (window.confirm("Are you sure to delete this blog?")) {
+            try {
+                setLoading(true)
+                const dataRef = doc(db, "blogs", id)
+                await deleteDoc(dataRef)
+                setLoading(false)
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+    }
 
     return (
         <div className="home">
@@ -40,7 +63,7 @@ const Home = () => {
             <div className='home-body'>
                 <div className="blog-section">
                     <p className='blog-headline'>Daily Blogs</p>
-                    <BlogSection blogs={blogs} />
+                    <BlogSection blogs={blogs} user={user} handleDelete={handleDelete} />
                 </div>
                 <div className="home-right">
                     <div className="tags-section">

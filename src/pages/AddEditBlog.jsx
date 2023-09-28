@@ -3,8 +3,8 @@ import "./addeditblog.scss"
 import { TagsInput } from "react-tag-input-component";
 import { db, storage } from "../firebase-config"
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { addDoc, collection, doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const initializeBlog = {
@@ -26,14 +26,31 @@ const categoryOptions = [
 
 const AddEditBlog = (props) => {
 
+  const params = useParams()
   const navigate = useNavigate()
 
-  const { user } = props
+  const { user,setActive } = props
 
   const [form, setForm] = useState(initializeBlog)
   const { title, tags, trending, category, description } = form
   const [file, setFile] = useState(null)
   const [progress, setProgress] = useState(null)
+
+  useEffect(() => {
+    params.id && getBlog()
+  }, [params.id])
+
+  const getBlog = async () => {
+    const dataRef = doc(db, "blogs", params.id)
+    const blogDetail = await getDoc(dataRef)
+    try {
+      setForm({ ...blogDetail.data() })
+      setActive("create")
+    } 
+    catch(error) {
+      console.log(error)
+    }
+  }
 
 
   const handleInput = (event) => {
@@ -127,8 +144,10 @@ const AddEditBlog = (props) => {
   }
 
 
+
   return (
     <div className="add-edit-blog">
+      <h1>{params.id ? "Update Blog" : "Create Blog"}</h1>
       <div className="blog-container">
         <form className='add-edit-form' onSubmit={handleSubmit}>
           <div className="input-container">
@@ -198,7 +217,7 @@ const AddEditBlog = (props) => {
             />
           </div>
           <div>
-            <button type='Submit'>Submit</button>
+            <button type='Submit'>{params.id ? "Update" : "Submit"}</button>
           </div>
         </form>
       </div>

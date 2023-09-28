@@ -1,10 +1,11 @@
 import React from 'react'
 import { excerpt } from '../utility'
 import "./blogSection.scss"
+import { NavLink } from 'react-router-dom'
 
 const BlogSection = (props) => {
 
-    const { blogs } = props
+    const { blogs, user, handleDelete } = props
 
     const renderBlogs = blogs?.map((element, index) => {
         return (
@@ -23,11 +24,18 @@ const BlogSection = (props) => {
                         <p>{excerpt(element.description, 120)}</p>
                     </div>
                     <div className='blog-bnt-section'>
-                        <button>Read more</button>
-                        <div>
-                            <button>Edit</button>
-                            <button>Delete</button>
-                        </div>
+                        <NavLink to={`/${element.id}`}>
+                            <button>Read more</button>
+                        </NavLink>
+
+                        {user && user.uid == element.userId ?
+                            <div>
+                                <NavLink to={`update/${element.id}`}>
+                                    <button>Edit</button>
+                                </NavLink>
+                                <button onClick={() => handleDelete(element.id)}>Delete</button>
+                            </div>
+                            : ""}
                     </div>
                 </div>
             </div>
