@@ -1,0 +1,30 @@
+.trending-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.trending {
+    display: flex;
+    margin-left: 23px;
+    text-decoration: none;
+    color: black;
+
+    .trending-left {
+        margin-right: 8px;
+    }
+
+    .trending-right {
+        margin-left: 8px;
+    }
+}
+
+.trending--timestamp {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.trending--title {
+    margin-top: 8px;
+}

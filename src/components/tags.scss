@@ -1,0 +1,14 @@
+.tags--tags {
+    padding: 4px 8px;
+    background-color: rgb(193, 189, 189);
+    margin: 4px;
+    border-radius: 2px;
+    text-decoration: none;
+    color: black;
+
+    &:hover {
+        cursor: pointer;
+        background-color: rgb(220, 117, 80);
+        transform: scale(1.02);
+    }
+}

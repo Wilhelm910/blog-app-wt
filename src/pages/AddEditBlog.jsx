@@ -3,7 +3,7 @@ import "./addeditblog.scss"
 import { TagsInput } from "react-tag-input-component";
 import { db, storage } from "../firebase-config"
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDoc, collection, doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
@@ -29,7 +29,7 @@ const AddEditBlog = (props) => {
   const params = useParams()
   const navigate = useNavigate()
 
-  const { user,setActive } = props
+  const { user, setActive } = props
 
   const [form, setForm] = useState(initializeBlog)
   const { title, tags, trending, category, description } = form
@@ -46,8 +46,8 @@ const AddEditBlog = (props) => {
     try {
       setForm({ ...blogDetail.data() })
       setActive("create")
-    } 
-    catch(error) {
+    }
+    catch (error) {
       console.log(error)
     }
   }
@@ -125,18 +125,35 @@ const AddEditBlog = (props) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    if (category, title, tags, trending, description, file) {
-      try {
-        await addDoc(collection(db, "blogs"), {
-          ...form,
-          timestamp: serverTimestamp(),
-          author: user.displayName,
-          userId: user.uid
-        })
+    if (category && title && tags && trending && description && file) {
+      if (!params.id) {
+        try {
+          await addDoc(collection(db, "blogs"), {
+            ...form,
+            timestamp: serverTimestamp(),
+            author: user.displayName,
+            userId: user.uid
+          })
+          alert("Blog created successfully")
+        }
+        catch (error) {
+          console.log(error)
+        }
+      } else {
+        try {
+          await updateDoc(doc(db, "blogs", params.id), {
+            ...form,
+            timestamp: serverTimestamp(),
+            author: user.displayName,
+            userId: user.uid
+          })
+          alert("Blog updated successfully")
+        }
+        catch (error) {
+          console.log(error)
+        }
       }
-      catch (error) {
-        console.log(error)
-      }
+
     } else {
       alert("All fields are mandatory")
     }
