@@ -9,6 +9,7 @@ import MostPopular from '../components/MostPopular'
 import Trending from '../components/Trending'
 
 
+
 const Home = (props) => {
 
 
@@ -17,6 +18,7 @@ const Home = (props) => {
     const [blogs, setBlogs] = useState([])
     const [tags, setTags] = useState([])
     const [trendingBlogs, setTrendingBlogs] = useState([])
+    const [search, setSearch] = useState("")
 
 
     const getTrendingBlogs = async () => {
@@ -80,11 +82,25 @@ const Home = (props) => {
                 console.log(error)
             }
         }
+    }
 
+    const handleInput = (event) => {
+        event.preventDefault()
+        setSearch(event.target.value)
+        console.log(search)
     }
 
     return (
         <div className="home">
+            <div className="search-container">
+                <input
+                    type='text'
+                    placeholder='Search...'
+                    name='search'
+                    value={search}
+                    onChange={handleInput}
+                />
+            </div>
             <div className="trending-section">
                 <h2>Trending</h2>
                 <Trending trendingBlogs={trendingBlogs} />
@@ -92,7 +108,7 @@ const Home = (props) => {
             <div className='home-body'>
                 <div className="blog-section">
                     <p className='blog-headline'>Daily Blogs</p>
-                    <BlogSection blogs={blogs} user={user} handleDelete={handleDelete} />
+                    <BlogSection blogs={blogs} user={user} handleDelete={handleDelete} search={search} />
                 </div>
                 <div className="home-right">
                     <div className="tags-section">
