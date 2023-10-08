@@ -7,6 +7,7 @@ import Spinner from '../components/Spinner'
 import Tags from '../components/Tags'
 import MostPopular from '../components/MostPopular'
 import Trending from '../components/Trending'
+import Categorys from '../components/Categorys'
 
 
 
@@ -19,6 +20,7 @@ const Home = (props) => {
     const [tags, setTags] = useState([])
     const [trendingBlogs, setTrendingBlogs] = useState([])
     const [search, setSearch] = useState("")
+    const [totalBlogs, setTotalBlogs] = useState(null)
 
 
     const getTrendingBlogs = async () => {
@@ -53,6 +55,7 @@ const Home = (props) => {
             const uniqueTags = [...new Set(tags)];
             setTags(uniqueTags);
             setBlogs(list)
+            setTotalBlogs(list)
             setLoading(false)
             setActive("/")
         }, (error) => {
@@ -90,6 +93,24 @@ const Home = (props) => {
         console.log(search)
     }
 
+    //category count
+
+    const counts = totalBlogs.reduce((prevValue, currentValue) => {
+        let name = currentValue.category
+        if (!prevValue.hasOwnProperty(name)) {
+            prevValue[name] = 0
+        }
+        prevValue[name]++
+        return prevValue
+    }, {})
+
+    const categoryCount = Object.keys(counts).map((item) => {
+        return {
+            category: item,
+            count: counts[item]
+        }
+    })
+
     return (
         <div className="home">
             <div className="search-container">
@@ -121,6 +142,12 @@ const Home = (props) => {
                         <p className='most-popular-headline'>Most popular</p>
                         <div className='most-popular-container'>
                             <MostPopular blogs={blogs} />
+                        </div>
+                    </div>
+                    <div className="category-section">
+                        <p className='category-headline'>Category</p>
+                        <div className='category-container'>
+                            <Categorys categoryCount={categoryCount} />
                         </div>
                     </div>
                 </div>

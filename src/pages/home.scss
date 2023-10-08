@@ -42,15 +42,15 @@
     }
 }
 
-.most-popular-section {
+.most-popular-section, .category-section {
     width: 90%;
     margin-top: 100px;
 
-    .most-popular-headline {
+    .most-popular-headline, .category-headline {
         border-bottom: 1px solid black;
     }
 
-    .most-popular-container {
+    .most-popular-container, .category-container {
         margin-top: 24px;
     }
 

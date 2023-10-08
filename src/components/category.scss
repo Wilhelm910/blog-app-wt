@@ -1,0 +1,15 @@
+.cat-link {
+    display: flex;
+    background-color: white !important;
+    text-decoration: none;
+    color: black;
+    margin: 4px;
+    padding: 4px;
+    border-radius: 4px;
+    align-items: flex-start;
+
+    &:hover {
+        background-color: rgb(169, 164, 164) !important;
+        transform: scale(1.01);
+    }
+}
