@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { db } from '../firebase-config'
 import "./detail.scss"
+import Card from '../components/Card'
 
 const Detail = (props) => {
 
@@ -23,20 +24,22 @@ const Detail = (props) => {
         setActive(null)
     }
 
-
     return (
-        <div className='blog-detail-section'>
-            <div className="blog-detail" style={{ backgroundImage: `url(${blog?.imgUrl})`, height: "750px", backgroundRepeat: "no-repeat", width: "100%", backgroundPosition: "center" }}>
-                <div className='detail-header'>
-                    <p>Date palceholder</p>
-                    <h2>{blog?.title}</h2>
+        <>
+            <div className='blog-detail-section'>
+                <div className="blog-detail" style={{ backgroundImage: `url(${blog?.imgUrl})`, height: "750px", backgroundRepeat: "no-repeat", width: "100%", backgroundPosition: "center" }}>
+                    <div className='detail-header'>
+                        <p>Date palceholder</p>
+                        <h2>{blog?.title}</h2>
+                    </div>
+                </div>
+                <div>
+                    <p style={{ borderBottom: "1px solid black", margin: "8px 0px" }}>Created by {blog?.author} - Date Placeholder</p>
+                    <p>{blog?.description}</p>
                 </div>
             </div>
-            <div>
-                <p style={{borderBottom: "1px solid black", margin: "8px 0px"}}>Created by {blog?.author} - Date Placeholder</p>
-                <p>{blog?.description}</p>
-            </div>
-        </div>
+            <Card tags={blog.tags} />
+        </>
     )
 }
 
