@@ -38,7 +38,7 @@ const Detail = (props) => {
                     <p>{blog?.description}</p>
                 </div>
             </div>
-            <Card tags={blog.tags} />
+            <Card tags={blog.tags} blog={blog} />
         </>
     )
 }
