@@ -4,12 +4,15 @@ import { useParams } from 'react-router-dom'
 import { db } from '../firebase-config'
 import "./detail.scss"
 import Card from '../components/Card'
+import Tags from '../components/Tags'
+import UserComments from '../components/UserComments'
 
 const Detail = (props) => {
 
     const { setActive } = props
     const params = useParams()
     const [blog, setBlog] = useState([])
+    const [comments, setComments] = useState([])
 
 
     useEffect(() => {
@@ -21,6 +24,7 @@ const Detail = (props) => {
         const dataRef = doc(db, "blogs", params.id)
         const blogDetail = await getDoc(dataRef)
         setBlog(blogDetail.data())
+        setComments(blogDetail.data().comments ? blogDetail.data().comments : [])
         setActive(null)
     }
 
@@ -36,6 +40,15 @@ const Detail = (props) => {
                 <div>
                     <p style={{ borderBottom: "1px solid black", margin: "8px 0px" }}>Created by {blog?.author} - Date Placeholder</p>
                     <p>{blog?.description}</p>
+                </div>
+                <div>
+                    <Tags tags={blog?.tags} />
+                </div>
+                <div>
+                    <div>
+                        <p>{blog?.comments?.length}Comments</p>
+                    </div>
+                    <UserComments />
                 </div>
             </div>
             <Card tags={blog.tags} blog={blog} />

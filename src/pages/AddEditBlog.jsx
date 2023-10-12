@@ -12,7 +12,9 @@ const initializeBlog = {
   tags: [],
   trending: "no",
   category: "",
-  description: ""
+  description: "",
+  comments: [],
+  likes: []
 }
 
 const categoryOptions = [

@@ -2,6 +2,8 @@ import { collection, getDocs, limit, query, where } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { db } from '../firebase-config'
+import { excerpt } from '../utility'
+import "./card.scss"
 
 const Card = (props) => {
 
@@ -28,25 +30,39 @@ const Card = (props) => {
     }, [tags])
 
     const renderRelatedBlogs = relatedBlogs?.map((item, index) => {
-        if (blog.title != item.title) {
+        if (relatedBlogs.length <= 1) {
             return (
-                <div key={index}>
-                    <NavLink to={`/${item.id}`}>
-                        <p>{item.title}</p>
-                    </NavLink>
+                <div>
+                    <p>No related Blogs</p>
                 </div>
             )
         }
+
+        if (blog.title != item.title) {
+            return (
+                <div key={index} className="related-blog">
+                    <NavLink className="related-blog-link" to={`/${item.id}`}>
+                        <div>
+                            <img style={{ width: "50px", height: "50px" }} src={item.imgUrl} />
+                        </div>
+                        <div>
+                            <h4>{item.title}</h4>
+                            <p>{excerpt(item.description, 50)}</p>
+                        </div>
+                    </NavLink>
+                </div>
+            )
+        } 
 
     })
 
 
 
     return (
-        <div style={{ margin: "32px" }}>
-            <div>
-                <p>Related Blogs</p>
-            </div>
+        <div style={{ margin: "32px", width: "fit-content" }}>
+
+            <p>Related Blogs</p>
+
             {renderRelatedBlogs}
         </div>
     )

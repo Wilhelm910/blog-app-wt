@@ -1,0 +1,13 @@
+.related-blog {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+
+    .related-blog-link {
+        text-decoration: none;
+        color: black;
+        display: flex;
+    }
+
+}
