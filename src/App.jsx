@@ -46,7 +46,7 @@ function App() {
       <Route index element={<Home setActive={setActive} user={user} />} />
       <Route path='create' element={user?.uid ? <AddEditBlog user={user} /> : <Navigate to="/" />} />
       <Route path='update/:id' element={user?.uid ? <AddEditBlog user={user} setActive={setActive} /> : <Navigate to="/" />} />
-      <Route path=':id' element={<Detail setActive={setActive} />} />
+      <Route path=':id' element={<Detail setActive={setActive} user={user} />} />
       <Route path='about' element={<About />} />
       <Route path='auth' element={<Auth setActive={setActive} />} />
       <Route path='*' element={<NotFound />} />
