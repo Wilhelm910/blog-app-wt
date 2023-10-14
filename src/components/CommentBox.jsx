@@ -16,7 +16,7 @@ const CommentBox = (props) => {
             </form>
             {!userId ? (
                 <>
-                    <h4>Please <NavLink to="auth">login or create</NavLink> an account to post a comment</h4>
+                    <h4>Please <NavLink to="/auth">login or create</NavLink> an account to post a comment</h4>
                 </>
             ) : (
                 <>

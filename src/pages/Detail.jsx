@@ -8,6 +8,7 @@ import Tags from '../components/Tags'
 import UserComments from '../components/UserComments'
 import { isEmpty } from 'lodash'
 import CommentBox from '../components/CommentBox'
+import LikeSection from '../components/LikeSection'
 
 const Detail = (props) => {
 
@@ -15,6 +16,7 @@ const Detail = (props) => {
     const params = useParams()
     const [blog, setBlog] = useState([])
     const [comments, setComments] = useState([])
+    const [likes, setLikes] = useState([])
     const [userComment, setUserComment] = useState([])
     const userId = user?.uid
 
@@ -32,8 +34,8 @@ const Detail = (props) => {
         setActive(null)
     }
 
+
     const handleComment = async (event) => {
-        console.log("test")
         event.preventDefault()
         comments.push({
             createdAt: Timestamp.fromDate(new Date()),
@@ -50,10 +52,14 @@ const Detail = (props) => {
         setComments(comments)
         setUserComment("")
     }
-    console.log(comments)
+
+    const handleLike = async() => {
+        console.log("liked")
+    }
 
     return (
         <>
+            {JSON.stringify(comments)}
             <div className='blog-detail-section'>
                 <div className="blog-detail" style={{ backgroundImage: `url(${blog?.imgUrl})`, height: "750px", backgroundRepeat: "no-repeat", width: "100%", backgroundPosition: "center" }}>
                     <div className='detail-header'>
@@ -62,7 +68,10 @@ const Detail = (props) => {
                     </div>
                 </div>
                 <div>
-                    <p style={{ borderBottom: "1px solid black", margin: "8px 0px" }}>Created by {blog?.author} - Date Placeholder</p>
+                    <div style={{ borderBottom: "1px solid black", margin: "8px 0px", display: "flex", justifyContent: "space-between" }}>
+                        <p>Created by {blog?.author} - Date Placeholder</p>
+                        <LikeSection handleLike={handleLike} />
+                    </div>
                     <p>{blog?.description}</p>
                 </div>
                 <div>
@@ -72,13 +81,18 @@ const Detail = (props) => {
                     <div>
                         <p>{blog?.comments?.length} Comments</p>
                     </div>
-                    {isEmpty(comments) ? (
+                    {comments.length < 1 ? (
                         <UserComments msg={"No comments for this blog. Be the first to comment"} />
                     ) :
                         <>
-                            {comments?.map((item, index) => {
-                                <UserComments item={item} index={index} />
+                            {comments?.map((comment, index) => {
+                                return (
+                                    <>
+                                        <UserComments index={index} {...comment} />
+                                    </>
+                                )
                             })}
+
                         </>
                     }
                     <CommentBox userComment={userComment} setUserComment={setUserComment} userId={userId} handleComment={handleComment} />
