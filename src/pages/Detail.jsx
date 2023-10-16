@@ -31,6 +31,7 @@ const Detail = (props) => {
         const blogDetail = await getDoc(dataRef)
         setBlog(blogDetail.data())
         setComments(blogDetail.data().comments ? blogDetail.data().comments : [])
+        setLikes(blogDetail.data().likes ? blogDetail.data().likes : [])
         setActive(null)
     }
 
@@ -53,8 +54,14 @@ const Detail = (props) => {
         setUserComment("")
     }
 
-    const handleLike = async() => {
-        console.log("liked")
+    const handleLike = async () => {
+        likes.push(userId)
+        await updateDoc(doc(db, "blogs", params.id), {
+            ...blog,
+            likes,
+            timestamp: serverTimestamp()
+        })
+        setLikes(likes)
     }
 
     return (
@@ -70,7 +77,11 @@ const Detail = (props) => {
                 <div>
                     <div style={{ borderBottom: "1px solid black", margin: "8px 0px", display: "flex", justifyContent: "space-between" }}>
                         <p>Created by {blog?.author} - Date Placeholder</p>
-                        <LikeSection handleLike={handleLike} />
+                        <LikeSection
+                            handleLike={handleLike}
+                            userId={userId}
+                            likes={likes}
+                        />
                     </div>
                     <p>{blog?.description}</p>
                 </div>
