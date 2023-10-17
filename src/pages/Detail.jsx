@@ -53,15 +53,24 @@ const Detail = (props) => {
         setComments(comments)
         setUserComment("")
     }
-
+   
+    
     const handleLike = async () => {
-        likes.push(userId)
+        console.log(likes)
+        if (likes.includes(userId)) {
+            likes.splice(likes.indexOf(userId), 1)
+            setLikes([...new Set(likes)]);
+        } else {
+            likes.push(userId)
+            setLikes([...new Set(likes)]);
+        }
         await updateDoc(doc(db, "blogs", params.id), {
             ...blog,
             likes,
             timestamp: serverTimestamp()
         })
-        setLikes(likes)
+
+        console.log(likes)
     }
 
     return (
@@ -99,7 +108,7 @@ const Detail = (props) => {
                             {comments?.map((comment, index) => {
                                 return (
                                     <>
-                                        <UserComments index={index} {...comment} />
+                                        <UserComments key={index} index={index} {...comment} />
                                     </>
                                 )
                             })}

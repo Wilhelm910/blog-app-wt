@@ -4,7 +4,6 @@ const UserComments = (props) => {
 
   const { body, msg, index, name, createdAt } = props
 
-  console.log(props)
   //props: user name, comment body, createdAt, default message when no comments
 
   return (

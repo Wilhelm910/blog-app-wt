@@ -7,31 +7,23 @@ const LikeSection = (props) => {
 
     const [userLike, setUserLike] = useState([])
 
-    const likeStatus = () => {
-        // like logic nach oben verschieben
+    const LikeStatus = () => {
+        if (userId) {
+            return (
+                <>
+                    <button onClick={handleLike}>Like</button>
+                </>)
+        } else if (!userId) {
+            return (
+                <p>Create an account or login to like this post</p>
+            )
+        }
     }
 
     return (
         <>
-            <p>{likes.length}</p>
-            {
-                userId && !likes.includes(userId)
-                    ?
-                    (<>
-                        <button onClick={handleLike}>Give a Like</button>
-                    </>)
-                    :
-                    (<>
-                        {!userId ?
-                            (<>
-                                <p>Create an account or login to like this post</p>
-                            </>) :
-                            (<>
-                                ""
-                            </>)
-                        }
-                    </>)
-            }
+            <p>{likes.length} {likes.length == 1 ? "Like" : "Likes"}</p>
+            {<LikeStatus />}
         </>
     )
 }
