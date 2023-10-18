@@ -9,11 +9,13 @@ import UserComments from '../components/UserComments'
 import { isEmpty } from 'lodash'
 import CommentBox from '../components/CommentBox'
 import LikeSection from '../components/LikeSection'
+import Spinner from '../components/Spinner'
 
 const Detail = (props) => {
 
     const { setActive, user } = props
     const params = useParams()
+    const [loading, setLoading] = useState(true)
     const [blog, setBlog] = useState([])
     const [comments, setComments] = useState([])
     const [likes, setLikes] = useState([])
@@ -33,6 +35,7 @@ const Detail = (props) => {
         setComments(blogDetail.data().comments ? blogDetail.data().comments : [])
         setLikes(blogDetail.data().likes ? blogDetail.data().likes : [])
         setActive(null)
+        setLoading(false)
     }
 
 
@@ -71,6 +74,10 @@ const Detail = (props) => {
         })
 
         console.log(likes)
+    }
+
+    if (loading) {
+        return <Spinner />
     }
 
     return (
@@ -118,7 +125,7 @@ const Detail = (props) => {
                     <CommentBox userComment={userComment} setUserComment={setUserComment} userId={userId} handleComment={handleComment} />
                 </div>
             </div>
-            <Card tags={blog.tags} blog={blog} />
+            <Card tags={blog.tags} blog={blog} likes={likes} comments={comments} />
         </>
     )
 }

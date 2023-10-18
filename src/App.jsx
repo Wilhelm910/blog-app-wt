@@ -14,6 +14,7 @@ import { signOut } from 'firebase/auth'
 import Detail from './pages/Detail'
 import TagBlog from './pages/TagBlog'
 import CategoryBlog from './pages/CategoryBlog'
+import Blogs from './pages/Blogs'
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
       <Route path='about' element={<About />} />
       <Route path='auth' element={<Auth setActive={setActive} />} />
       <Route path='*' element={<NotFound />} />
+      <Route path='blogs' element={<Blogs />} />
       <Route path='tag/:tag' element={<TagBlog />} />
       <Route path='category/:category' element={<CategoryBlog />} />
     </Route>

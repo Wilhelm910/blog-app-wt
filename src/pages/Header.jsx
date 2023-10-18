@@ -14,6 +14,11 @@ const Header = (props) => {
                     to="/"
                     onClick={() => setActive("home")}
                 >Home</NavLink>
+                  <NavLink
+                    className={`nav-link ${active === "blogs" ? "active" : ""}`}
+                    to="blogs"
+                    onClick={() => setActive("blogs")}
+                >Blogs</NavLink>
                 <NavLink
                     className={`nav-link ${active === "create" ? "active" : ""}`}
                     onClick={() => setActive("create")}

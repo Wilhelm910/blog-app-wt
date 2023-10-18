@@ -7,7 +7,7 @@ import "./card.scss"
 
 const Card = (props) => {
 
-    const { tags, blog } = props
+    const { tags, blog, likes, comments } = props
     const [relatedBlogs, setRelatedBlogs] = useState([])
 
     const getRelatedBlogs = async () => {
@@ -48,6 +48,10 @@ const Card = (props) => {
                         <div>
                             <h4>{item.title}</h4>
                             <p>{excerpt(item.description, 50)}</p>
+                        </div>
+                        <div>
+                            <p>Comments: {comments.length}</p>
+                            <p>Likes: {likes.length}</p>
                         </div>
                     </NavLink>
                 </div>
