@@ -4,6 +4,7 @@ const Pagination = (props) => {
 
     const { handlePageChange, currentPage, nrOfPages } = props
 
+
     return (
         <>
             <button

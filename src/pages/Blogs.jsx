@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Spinner from '../components/Spinner'
-import { collection, getDocs, limit, orderBy, query, startAfter } from 'firebase/firestore'
+import { collection, endAt, endBefore, getDocs, limit, limitToLast, orderBy, query, startAfter } from 'firebase/firestore'
 import { db } from '../firebase-config'
 import BlogSection from '../components/BlogSection'
 import Pagination from '../components/Pagination'
@@ -43,15 +43,15 @@ const Blogs = () => {
             console.log(error)
         }
     }
-    console.log(lastVisible)
+   
     const getAllBlogs = async () => {
         const blogRef = collection(db, "blogs")
         const docSnapshot = await getDocs(blogRef)
-        const totalBlogs = docSnapshot.length
+        const totalBlogs = docSnapshot.size
         const totalPages = Math.ceil(totalBlogs / 4)
         setNrOfPages(totalPages)
     }
-
+  
     const fetchMore = async () => {
         const blogRef = collection(db, "blogs")
         const moreBlogsQuery = query(blogRef, orderBy("title"), startAfter(lastVisible), limit(4))
@@ -66,7 +66,12 @@ const Blogs = () => {
 
     const fetchPrev = async () => {
         const blogRef = collection(db, "blogs")
-        const moreBlogsQuery = query(blogRef, orderBy("title"), startAfter(lastVisible -8), limit(4))
+
+        const end = nrOfPages !== currentPage ? endAt(lastVisible) : endBefore(lastVisible)
+
+        const limitData = nrOfPages !== currentPage ? limit(4) : count <= 4 && nrOfPages % 2 == 0 ? limit(4) : limitToLast(4)
+
+        const moreBlogsQuery = query(blogRef, orderBy("title"), end, limitData)
         const moreBlogs = await getDocs(moreBlogsQuery)
         setBlogs(moreBlogs.docs.map((item) => ({
             id: item.id,
@@ -103,7 +108,6 @@ const Blogs = () => {
 
     return (
         <>
-            {renderBlogs}
             <BlogSection blogs={blogs} />
             <Pagination handlePageChange={(e) => handlePageChange(e)} currentPage={currentPage} nrOfPages={nrOfPages} />
         </>
